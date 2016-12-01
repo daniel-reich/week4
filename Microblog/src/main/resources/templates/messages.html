@@ -9,14 +9,23 @@
 <br>
 <form action="/create-message" method="post">
     <input type="text" placeholder="Enter your message" name="messageText" width="200"/>
- <!--   <input type="hidden" value="{{replyId}}" name="replyId"/>  -->
     <button type="submit">Post Message</button>
+</form><br>
+<form action="/delete-message" method="post">
+    <input type="text" placeholder="message #" name="messageId" width="200"/>
+    <button type="submit">Delete</button>
+</form><br>
+<form action="/edit-message" method="post">
+    <input type="number" placeholder="message #" name="messageId" width="200"/>
+    <input type="text" placeholder="Edit your message" name="messageText" width="700"/>
+    <button type="submit">Edit</button>
 </form>
 Messages by {{.}}:<br><br>
 {{/userName}}
 
+
 {{#messages}}
-{{text}}<br>
+{{id}}.{{text}}<br>
 {{/messages}}
 
 

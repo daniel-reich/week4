@@ -2,12 +2,10 @@
 
 public class Message {
     int id;
-    String author;
     String text;
 
-    public Message(int id, String author, String text) {
-        this.id = id;
-        this.author = author;
+    public Message(int id, String text) {
         this.text = text;
+        this.id = id;
     }
 }

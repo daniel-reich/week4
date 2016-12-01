@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Main {
     static HashMap<String, User> users = new HashMap<>();
-    static HashMap<String, Message> messages = new HashMap<>();
+    //static HashMap<String, Message> messages = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -18,9 +18,7 @@ public class Main {
                 ((request, response) -> {
                     Session session = request.session();
                     String userName = session.attribute("userName");
-                    System.out.println("User "+userName);
                     String enteredPassword = session.attribute("enteredPassword");
-                    System.out.println("Password "+enteredPassword);
                     HashMap m = new HashMap();
                     ArrayList<Message> threads = new ArrayList<>();
 
@@ -30,14 +28,11 @@ public class Main {
 
                         User user = users.get(userName);
                         String userPassword = user.password;
-                        System.out.println("User"+userPassword);
-                        System.out.println("entered"+enteredPassword);
                         if (userPassword.equals(enteredPassword)) {
-
-                            for (int i = 0; i < messages.size(); i++) {
-                                if (messages.get(userName + i) != null) {
-                                    threads.add(messages.get(userName + i));
-                                }
+                            for (int i = 0; i < user.messages.size(); i++) {
+                                    Message temp = user.messages.get(i+1);
+                                    temp.id=i+1;
+                                    threads.add(user.messages.get(i+1));
                             }
 
                             m.put("messages", threads);
@@ -65,7 +60,6 @@ public class Main {
                         user.password = enteredPassword;
                         users.put(userName, user);
                     }
-                    System.out.println(user.password);/////////////////
                     Session session = request.session();
                     session.attribute("userName", userName);
                     session.attribute("enteredPassword", enteredPassword);
@@ -74,28 +68,6 @@ public class Main {
                 })
         );
 
-
-        Spark.post(
-                "/login",
-                ((request, response) -> {
-                    String userName = request.queryParams("loginName");
-                    if (userName == null) {
-                        throw new Exception("Login name not found.");
-                    }
-
-                    User user = users.get(userName);
-                    if (user == null) {
-                        user = new User(userName);
-                        users.put(userName, user);
-                    }
-
-                    Session session = request.session();
-                    session.attribute("userName", userName);
-
-                    response.redirect("/");
-                    return "";
-                })
-        );
 
         Spark.post(
                 "/logout",
@@ -115,11 +87,55 @@ public class Main {
                     if (userName == null) {
                         throw new Exception("Not logged in.");
                     }
+                    User user = users.get(userName);
 
                     String text = request.queryParams("messageText");
+                    Message m = new Message(user.messages.size()+1, text);
+                                  //System.out.println("Hashmap size :"+user.messages.size());
+                                  //System.out.println("ID #: "+m.id);
+                    user.messages.put(user.messages.size()+1, m);
+                                  System.out.println("Hashmap size :"+user.messages.size());
 
-                    Message m = new Message(messages.size(), userName, text);
-                    messages.put(userName+messages.size(), m);
+                    response.redirect(request.headers("Referer"));
+                    return "";
+                })
+        );
+
+        Spark.post(
+                "/edit-message",
+                ((request, response) -> {
+                    Session session = request.session();
+                    String userName = session.attribute("userName");
+                    if (userName == null) {
+                        throw new Exception("Not logged in.");
+                    }
+                    User user = users.get(userName);
+                    String temp = request.queryParams("messageId");
+                    int id = Integer.parseInt(temp);
+                    String text = request.queryParams("messageText");
+                    Message m = new Message(id, text);
+                    user.messages.replace(id, m);
+
+                    response.redirect(request.headers("Referer"));
+                    return "";
+                })
+        );
+
+        Spark.post(
+                "/delete-message",
+                ((request, response) -> {
+                    Session session = request.session();
+                    String userName = session.attribute("userName");
+                    if (userName == null) {
+                        throw new Exception("Not logged in.");
+                    }
+                    User user = users.get(userName);
+                    String temp = request.queryParams("messageId");
+                    int id = Integer.parseInt(temp);
+                    user.messages.remove(id);
+                    for (int i=id+1; i<=user.messages.size()+1; i++){
+                        user.messages.put(i-1, user.messages.remove(i));
+                    }
 
                     response.redirect(request.headers("Referer"));
                     return "";
