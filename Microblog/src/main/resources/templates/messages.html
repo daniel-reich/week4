@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Microblog</title>
+</head>
+<body>
+{{#userName}}
+<br>
+<form action="/create-message" method="post">
+    <input type="text" placeholder="Enter your message" name="messageText" width="200"/>
+ <!--   <input type="hidden" value="{{replyId}}" name="replyId"/>  -->
+    <button type="submit">Post Message</button>
+</form>
+Messages by {{.}}:<br><br>
+{{/userName}}
+
+{{#messages}}
+{{text}}<br>
+{{/messages}}
+
+
+<br>
+<form action="/logout" method="post">
+    <button type="submit">Logout</button>
+</form>
+</body>
+</html>
