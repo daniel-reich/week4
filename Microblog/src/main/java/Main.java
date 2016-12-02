@@ -26,13 +26,13 @@ public class Main {
                         return new ModelAndView(m, "index.html");
                     } else {
 
-                        User user = users.get(userName);
+                        User user = users.get(userName);                      //find the user
                         String userPassword = user.password;
                         if (userPassword.equals(enteredPassword)) {
-                            for (int i = 0; i < user.messages.size(); i++) {
-                                    Message temp = user.messages.get(i+1);
-                                    temp.id=i+1;
-                                    threads.add(user.messages.get(i+1));
+                            for (int i = 1; i <= user.messages.size(); i++) {
+                                    Message temp = user.messages.get(i);      //make a message object equal to the object stored in hashmap
+                                    temp.id=i;                                //within this new obect, assign the id to be the "position" it holds in the hashmap
+                                    threads.add(user.messages.get(i));        //add this new object to "threads" array that will be displayed on the page
                             }
 
                             m.put("messages", threads);
@@ -89,13 +89,9 @@ public class Main {
                     }
                     User user = users.get(userName);
 
-                    String text = request.queryParams("messageText");
-                    Message m = new Message(user.messages.size()+1, text);
-                                  //System.out.println("Hashmap size :"+user.messages.size());
-                                  //System.out.println("ID #: "+m.id);
-                    user.messages.put(user.messages.size()+1, m);
-                                  System.out.println("Hashmap size :"+user.messages.size());
-
+                    String text = request.queryParams("messageText");        ///Get the message from the web browser
+                    Message m = new Message(user.messages.size()+1, text);   ///put message from browser into new message object
+                    user.messages.put(user.messages.size()+1, m);            ///put this message object in a hashmap that belongs to the user. Assign it a key, which is the order it was put in the hashmap.
                     response.redirect(request.headers("Referer"));
                     return "";
                 })
@@ -133,8 +129,9 @@ public class Main {
                     String temp = request.queryParams("messageId");
                     int id = Integer.parseInt(temp);
                     user.messages.remove(id);
-                    for (int i=id+1; i<=user.messages.size()+1; i++){
-                        user.messages.put(i-1, user.messages.remove(i));
+
+                    for (int i=id+1; i<=user.messages.size()+1; i++){   //// for every message # greater than the deleleted message
+                       user.messages.put(i-1, user.messages.remove(i));//  replace the hashmap key to one number less
                     }
 
                     response.redirect(request.headers("Referer"));
