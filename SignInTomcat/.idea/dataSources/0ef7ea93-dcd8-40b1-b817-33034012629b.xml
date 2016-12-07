@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="HSQLDB (Local) - lib">
+  <database-model serializer="dbm" rdbms="HSQLDB" format-version="2.6">
+    <database id="1" name="PUBLIC">
+      <visible>1</visible>
+    </database>
+    <schema id="2" parent="1" name="PUBLIC">
+      <visible>1</visible>
+    </schema>
+    <schema id="3" parent="1" name="INFORMATION_SCHEMA"/>
+    <schema id="4" parent="1" name="SYSTEM_LOBS"/>
+    <table id="5" parent="2" name="GUEST_TABLE"/>
+    <table id="6" parent="2" name="SAMPLE_TABLE"/>
+    <column id="7" parent="5" name="GUESTID">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(32)|4</data-type>
+      <sequence-identity>1</sequence-identity>
+    </column>
+    <column id="8" parent="5" name="INDATE">
+      <data-type>VARCHAR(256)|12</data-type>
+    </column>
+    <column id="9" parent="5" name="FIRSTNAME">
+      <data-type>VARCHAR(256)|12</data-type>
+    </column>
+    <column id="10" parent="5" name="LASTNAME">
+      <data-type>VARCHAR(256)|12</data-type>
+    </column>
+    <column id="11" parent="5" name="COMMENT">
+      <data-type>VARCHAR(256)|12</data-type>
+    </column>
+    <column id="12" parent="5" name="SIGNEDOUT">
+      <data-type>BOOLEAN(0)|16</data-type>
+    </column>
+    <column id="13" parent="5" name="OUTDATE">
+      <data-type>VARCHAR(256)|12</data-type>
+    </column>
+    <key id="14" parent="5" name="SYS_PK_10096">
+      <name-surrogate>1</name-surrogate>
+      <columns>GUESTID</columns>
+      <primary>1</primary>
+    </key>
+    <column id="15" parent="6" name="ID">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(32)|4</data-type>
+      <sequence-identity>1</sequence-identity>
+    </column>
+    <column id="16" parent="6" name="STR_COL">
+      <data-type>VARCHAR(256)|12</data-type>
+    </column>
+    <column id="17" parent="6" name="NUM_COL">
+      <data-type>INTEGER(32)|4</data-type>
+    </column>
+    <key id="18" parent="6" name="SYS_PK_10092">
+      <name-surrogate>1</name-surrogate>
+      <columns>ID</columns>
+      <primary>1</primary>
+    </key>
+  </database-model>
+</dataSource>
